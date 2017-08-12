@@ -3,10 +3,11 @@
 ### Purpose
 The purpose of the assignment is to produce a single R markdown document that can be processed by knitr and be transformed into an HTML file. The report must include the code used to generate the output and the output itself.  
 
-### Source Data
+
+### Loading and preprocessing the data
 The assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November 2012 and include the number of steps taken in 5 minute intervals each day. It is located at (https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip).  
 
-### Libraries
+#### Libraries
 
 ```r
 library(dplyr) 
@@ -14,7 +15,7 @@ library(ggplot2)
 ```
 
 
-### Reading Activity Data  
+#### Reading Activity Data  
 
 ```r
 temp <- tempfile()
@@ -33,7 +34,8 @@ stepsbydate <- summarise(activityset1, sum_steps = sum(steps))
 
 ***
 
-### Total Steps per Day  
+### What is mean total number of steps taken per day?
+ 
 Histogram of the total steps per day.  
 
 ```r
@@ -49,7 +51,7 @@ invisible(dev.off())
 
 ***
 
-### Mean and Median of the Total Steps per Day  
+#### Mean and Median of the Total Steps per Day  
 
 ```r
 options(scipen=999)
@@ -62,7 +64,7 @@ The median total number of steps per day is **10,765**.
 
 ***
 
-### Time Series Plot of Average Number of Steps  
+### What is the average daily activity pattern?  
   
 
 ```r
@@ -82,7 +84,7 @@ invisible(dev.off())
 
 ***
 
-### Interval with Highest Average Step Count  
+#### Interval with Highest Average Step Count  
 
 ```r
 options(scipen=999)
@@ -97,8 +99,8 @@ The interval with the highest average steps is **835** with **206**.
 
 ***
 
-### Missing Values  
-
+### Imputing missing values
+  
 
 ```r
 nasteps <- filter(activity, is.na(steps))
@@ -107,8 +109,9 @@ nas <- formatC(count(nasteps),format="d",big.mark=",")
 
 There are **2,304** NAs in the data set.  
 
+***
 
-### Dealing with Missing Values 
+#### Missing Value Strategy 
 
 I am substituting the NAs with the average number of steps for the interval. 
 
@@ -122,7 +125,7 @@ stepsbydate2 <- summarise(intervalsteps, sum_steps = sum(steps))
 
 ***
 
-### Total Steps per Day (after replacing NAs) 
+#### Total Steps per Day (after replacing NAs) 
 
 
 ```r
@@ -136,8 +139,9 @@ ggsave("total_steps_no_nas.png")
 invisible(dev.off())
 ```
 
+***
 
-### Mean and Median of the Total Steps per Day (after replacing NAs) 
+#### Mean and Median of the Total Steps per Day (after replacing NAs) 
 
 ```r
 options(scipen=999)
@@ -150,7 +154,8 @@ The median total number of steps per day is **10,766**.
 
 ***
 
-### Activity Patterns: Weekday vs Weekend
+### Are there differences in activity patterns between weekdays and weekends?
+
 For this analysis I am using the data set where NAs have been replaced by the average steps per interval. 
 
 ```r
@@ -160,7 +165,7 @@ intervalsteps <- mutate(intervalsteps, date_category =
                            "weekday")))                                      
 ```
 
-### Comparing Activity: Weekday vs Weekend
+#### Comparing Activity: Weekday vs Weekend
 
 ```r
 ##intervalsteps <- 
